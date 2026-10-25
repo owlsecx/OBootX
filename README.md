@@ -18,21 +18,18 @@
 
 ## 📌 Overview
 
-Offline boot-chain security auditor — GRUB2, systemd-boot, kernel cmdline, Secure Boot, initramfs
+OBootX is an offline, read-only auditor for the Linux boot chain, covering GRUB2, systemd-boot, the kernel command line, Secure Boot/MOK, initramfs and /boot & ESP layout. It flags weak or missing bootloader passwords, dangerous kernel parameters, Secure Boot gaps and secrets embedded in initramfs images, with all secrets masked. It can audit the live host or a mounted image via --root, mapping findings to a score, A+…F grade and hardened templates.
 
 ---
 
 ## ✨ Features
 
-- GRUB2 — superusers / password_pbkdf2, plaintext passwords (masked), --unrestricted entries, recovery entries, os-prober, cryptodisk, iterations
-- systemd-boot — editor, timeout, auto-firmware, EFI shell entries, per-entry kernel options
-- Kernel cmdline — init=/bin/sh, rd.break, single, debug-shell, KASLR, CPU mitigations, lockdown, module.sig_enforce, IOMMU, allocator hardening, audit=1, AppArmor / SELinux switches
-- Secure Boot / MOK — mokutil text exports, efivars, setup mode, MOK validation, test / expired keys
-- initramfs — initramfs-tools, dracut, dropbear, cryptsetup keyfiles, stdlib cpio (gz/xz) scanner
-- /boot, ESP and grub.cfg permissions; LUKS layout
-- Secrets masked everywhere; --root offline images
-- Export TXT / Markdown / JSON / CSV / SARIF 2.1.0
-- Self-test --demo, CI gates --fail-on / --min-severity
+- GRUB2 checks: superusers, pbkdf2 passwords, unrestricted/recovery entries, cryptodisk
+- systemd-boot checks: editor, timeout, auto-firmware and per-entry kernel options
+- Kernel cmdline analysis: init=/bin/sh, rd.break, KASLR, mitigations, lockdown
+- Secure Boot / MOK review and stdlib cpio initramfs scanning (gz/xz)
+- /boot, ESP and grub.cfg permissions with all secrets masked
+- Export TXT/MD/JSON/CSV/SARIF, --demo self-test and CI fail-on gates
 
 ---
 
@@ -46,7 +43,10 @@ Offline boot-chain security auditor — GRUB2, systemd-boot, kernel cmdline, Sec
 ## 🚀 Usage
 
 ```bash
-./OBootX
+./OBootX --scan
+./OBootX --root /mnt/image --scan --format json -o report.json --fail-on high
+./OBootX --demo
+./OBootX --help
 ```
 
 ---
